@@ -18,7 +18,7 @@ class NewVisitorTest(unittest.TestCase):
         # Page title includes Chemical Inventory
         self.assertIn('Chemical Inventory', self.browser.title)
         header_text = self.browser.find_element_by_tag_name('h1').text
-        self.assertIn('Chemical Inventory', header_text)
+        self.assertIn('Current Inventory', header_text)
 
         # Invited to add a new chemical
         # Adds Hexanes (CAS #110-54-3)
@@ -31,7 +31,8 @@ class NewVisitorTest(unittest.TestCase):
 
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertTrue(any(row.text == '1: Hexanes' for row in rows))
+        self.assertTrue(any(row.text == '1: Hexanes' for row in rows),
+        "New chemical not in table")
 
         self.fail("Finish The Test!")
         # Inputs the receipt date

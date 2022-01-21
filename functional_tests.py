@@ -1,13 +1,15 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from django.test import Client
 import time
 import unittest
+
 
 class NewVisitorTest(unittest.TestCase):
 
     def setUp(self):
         self.browser = webdriver.Firefox()
-    
+
     def tearDown(self):
         self.browser.quit()
 
@@ -26,22 +28,22 @@ class NewVisitorTest(unittest.TestCase):
         self.assertIn('Current Inventory', header_text)
 
         # Invited to add a new chemical
-        # Adds Hexanes (CAS #110-54-3)
+        # Adds Hexanes with Barcode 1234 (CAS #110-54-3)
         inputbox = self.browser.find_element_by_id('id_new_item')
-        self.assertEqual(inputbox.get_attribute('placeholder'), 'Enter Chemical')
+        self.assertEqual(inputbox.get_attribute('placeholder'),
+                         'Enter Chemical')
 
         inputbox.send_keys('Hexanes')
         inputbox.send_keys(Keys.ENTER)
+
         time.sleep(1)
-        self.check_for_row_in_list_table('Hexanes')
 
         inputbox = self.browser.find_element_by_id('id_new_item')
-        inputbox.send_keys('Acetone')
-        inputbox.send_keys
-        time.sleep(1)
 
+        inputbox.send_keys('Acetone')
+        inputbox.send_keys(Keys.ENTER)
+        time.sleep(1)
         self.check_for_row_in_list_table('Hexanes')
-        self.check_for_row_in_list_table('Acetone')
 
         self.fail("Finish The Test!")
         # Inputs the receipt date
@@ -57,6 +59,7 @@ class NewVisitorTest(unittest.TestCase):
         # Scans Barcode
 
         # Marks chemical as used up
+
 
 if __name__ == '__main__':
     unittest.main()

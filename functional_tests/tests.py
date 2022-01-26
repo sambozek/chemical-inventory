@@ -1,11 +1,10 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-from django.test import Client
+from django.test import LiveServerTestCase
 import time
-import unittest
 
 
-class NewVisitorTest(unittest.TestCase):
+class NewVisitorTest(LiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Firefox()
@@ -20,7 +19,7 @@ class NewVisitorTest(unittest.TestCase):
 
     def test_can_input_inventory_and_retrieve_it_later(self):
         # The page for the inventory management system
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
 
         # Page title includes Chemical Inventory
         self.assertIn('Chemical Inventory', self.browser.title)
@@ -59,7 +58,3 @@ class NewVisitorTest(unittest.TestCase):
         # Scans Barcode
 
         # Marks chemical as used up
-
-
-if __name__ == '__main__':
-    unittest.main()

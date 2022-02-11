@@ -68,3 +68,43 @@ class NewVisitorTest(LiveServerTestCase):
         # Scans Barcode
 
         # Marks chemical as used up
+
+    def test_multiple_users_can_start_lists_at_different_urls(self):
+        # SEB starts a new to-do list
+        self.browser.get(self.live_server_url)
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('Hexanes')
+        inputbox.send_keys(Keys.ENTER)
+        self.wait_for_row_in_list_table('Hexanes')
+
+        # Inventory has unique URL
+        chem_inv_url = self.browser.current_url
+        self.assertRegex(chem_inv_url, '/inv/.+')
+
+        # new user, gen_inv, comes to site
+        self.browser.quit()
+        self.browser = webdriver.Firefox()
+
+        # gen_inv does not see chem_inv
+        self.browser.get(self.live_server_url)
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('Hexanes', page_text)
+        self.assertNotIn('Acetone', page_text)
+        
+        # gen_inv inputs 500mL glass bottle
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('500mL Glass Bottle')
+        inputbox.send_keys(Keys.ENTER)
+        self.wait_for_row_in_list_table('500mL Glass Bottle')
+
+        # gen_inv has its own URL
+        gen_inv_url = self.browser.current_url
+        self.assertRegex(gen_inv_url, '/lists/.+')
+        self.assertNotEqual( gen_inv_url, chem_inv_url)
+
+        # gen_inv does not have content of chem_inv
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('Hexanes', page_text)
+        self.assertIn('500mL Glass Bottle', page_text)
+
+        # sleep when these are satisfied.

@@ -19,4 +19,5 @@ from inventory_input import views
 
 urlpatterns = [
     re_path(r'^$', views.home_page, name='home'),
+    re_path(r'^inventory_management/the-only-inv-around/$', views.view_list, name='view_list'),
 ]

@@ -54,7 +54,7 @@ class NewVisitorTest(LiveServerTestCase):
         self.wait_for_row_in_list_table('Acetone')
         self.wait_for_row_in_list_table('Hexanes')
 
-        self.fail("Finish The Test!")
+        # self.fail("Finish The Test!")
         # Inputs the receipt date
 
         # Leaves open date blank
@@ -79,7 +79,7 @@ class NewVisitorTest(LiveServerTestCase):
 
         # Inventory has unique URL
         chem_inv_url = self.browser.current_url
-        self.assertRegex(chem_inv_url, '/inv/.+')
+        self.assertRegex(chem_inv_url, '/inventory_management/.+')
 
         # new user, gen_inv, comes to site
         self.browser.quit()
@@ -99,7 +99,7 @@ class NewVisitorTest(LiveServerTestCase):
 
         # gen_inv has its own URL
         gen_inv_url = self.browser.current_url
-        self.assertRegex(gen_inv_url, '/lists/.+')
+        self.assertRegex(gen_inv_url, '/inventory_management/.+')
         self.assertNotEqual( gen_inv_url, chem_inv_url)
 
         # gen_inv does not have content of chem_inv

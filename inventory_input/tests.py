@@ -32,20 +32,11 @@ class HomePageTest(TestCase):
             'item_text': 'A new inventory item'
         })
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['location'], '/')
+        self.assertEqual(response['location'], '/inventory_management/the-only-inv-around/')
 
     def test_only_saves_items_when_necessary(self):
         self.client.get('/')
         self.assertEqual(Item.objects.count(), 0)
-
-    def test_displays_all_list_items(self):
-        Item.objects.create(text='inv1')
-        Item.objects.create(text='inv2')
-
-        response = self.client.get('/')
-
-        self.assertIn('inv1', response.content.decode())
-        self.assertIn('inv2', response.content.decode())
 
 
 class ItemModelTest(TestCase):
@@ -67,3 +58,18 @@ class ItemModelTest(TestCase):
         self.assertEqual(first_saved_item.text, 'The first (ever) inv item')
         self.assertEqual(second_saved_item.text, 'Inv the second')
 
+
+class ListViewTest(TestCase):
+
+    def test_uses_list_template(self):
+        response = self.client.get('/inv_management/the-only-inv-around')
+        self.assertTemplateUsed(response, 'list.html')
+
+    def test_displays_all_items(self):
+        Item.objects.create(text='itemy 1')
+        Item.objects.create(text='itemy 2')
+
+        response = self.client.get('/inventory_management/the-only-inv-around/')
+
+        self.assertContains(response, 'itemy 1')
+        self.assertContains(response, 'itemy 2')

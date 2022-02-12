@@ -62,7 +62,7 @@ class ItemModelTest(TestCase):
 class ListViewTest(TestCase):
 
     def test_uses_list_template(self):
-        response = self.client.get('/inv_management/the-only-inv-around')
+        response = self.client.get('/inventory_management/the-only-inv-around/')
         self.assertTemplateUsed(response, 'list.html')
 
     def test_displays_all_items(self):
@@ -73,3 +73,4 @@ class ListViewTest(TestCase):
 
         self.assertContains(response, 'itemy 1')
         self.assertContains(response, 'itemy 2')
+

@@ -19,7 +19,7 @@ class HomePageTest(TestCase):
 
 #TODO: Is POST test too long?
     def test_can_save_a_POST_request(self):
-        response = self.client.post('/', data={
+        response = self.client.post('/inventory_management/new', data={
             'item_text': 'A new inventory item'
         })
 
@@ -28,15 +28,10 @@ class HomePageTest(TestCase):
         self.assertEqual(new_item.text, 'A new inventory item')
 
     def test_redirects_after_POST(self):
-        response = self.client.post('/', data={
+        response = self.client.post('/inventory_management/new', data={
             'item_text': 'A new inventory item'
         })
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['location'], '/inventory_management/the-only-inv-around/')
-
-    def test_only_saves_items_when_necessary(self):
-        self.client.get('/')
-        self.assertEqual(Item.objects.count(), 0)
+        self.assertRedirects(response, '/inventory_management/the-only-inv-around/')
 
 
 class ItemModelTest(TestCase):
